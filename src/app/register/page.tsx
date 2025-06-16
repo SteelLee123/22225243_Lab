@@ -13,6 +13,7 @@ export default function RegisterPage() {
       body: JSON.stringify(form),
       headers: { 'Content-Type': 'application/json' },
     });
+
     if (res.ok) {
       alert('Registered successfully!');
       router.push('/login');
@@ -22,12 +23,45 @@ export default function RegisterPage() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 flex flex-col gap-2">
-      <h1 className="text-xl font-bold">Register</h1>
-      <input placeholder="Name" onChange={e => setForm({ ...form, name: e.target.value })} />
-      <input placeholder="Email" onChange={e => setForm({ ...form, email: e.target.value })} />
-      <input type="password" placeholder="Password" onChange={e => setForm({ ...form, password: e.target.value })} />
-      <button className="bg-blue-600 text-white p-2">Register</button>
-    </form>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
+      <div className="w-full max-w-md bg-white shadow-md rounded-xl p-8 border border-gray-200">
+        <h1 className="text-2xl font-bold text-center text-[#002147] mb-1">
+          School of Software Engineering
+        </h1>
+        <p className="text-sm text-gray-600 text-center mb-6">
+          Student Registration Portal
+        </p>
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <input
+            type="text"
+            placeholder="Full Name"
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            required
+            className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002147]"
+          />
+          <input
+            type="email"
+            placeholder="Email"
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            required
+            className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002147]"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            required
+            className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002147]"
+          />
+          <button
+            type="submit"
+            className="bg-[#002147] text-white py-2 rounded-lg hover:bg-[#001030] transition"
+          >
+            Register
+          </button>
+        </form>
+      </div>
+    </div>
   );
 }
