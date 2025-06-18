@@ -1,16 +1,36 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [form, setForm] = useState({ name: '', email: '', password: '', confirmPassword: '' });
+  const [error, setError] = useState('');
 
   async function handleSubmit(e: any) {
     e.preventDefault();
+    setError('');
+
+    // Check if passwords match
+    if (form.password !== form.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    // Check if password is at least 6 characters
+    if (form.password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return;
+    }
+
     const res = await fetch('/api/register', {
       method: 'POST',
-      body: JSON.stringify(form),
+      body: JSON.stringify({
+        name: form.name,
+        email: form.email,
+        password: form.password
+      }),
       headers: { 'Content-Type': 'application/json' },
     });
 
@@ -31,6 +51,12 @@ export default function RegisterPage() {
         <p className="text-sm text-gray-600 text-center mb-6">
           Student Registration Portal
         </p>
+
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded text-sm">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
@@ -54,6 +80,13 @@ export default function RegisterPage() {
             required
             className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002147]"
           />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
+            required
+            className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002147]"
+          />
           <button
             type="submit"
             className="bg-[#002147] text-white py-2 rounded-lg hover:bg-[#001030] transition"
@@ -61,6 +94,15 @@ export default function RegisterPage() {
             Register
           </button>
         </form>
+
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-600">
+            Already have an account?{' '}
+            <Link href="/login" className="text-[#002147] hover:underline font-medium">
+              Login here
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
